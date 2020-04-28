@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (libraries core gnuplot)
+  (modes (native exe) (byte exe))
+)
