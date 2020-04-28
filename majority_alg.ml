@@ -43,7 +43,7 @@ module MajoritySamplingAlgorithm (Spec: SPEC) (Function: FUNCTION with type p = 
     let threshhold =
       let open Float in
       let no_samples = of_int no_samples in
-      to_int (no_samples / 2.0  - sqrt (no_samples)) in
+      to_int (no_samples / 2.0  - sqrt (no_samples)) |> fun x -> Int.(x + 1)  in
     let count = ref 0 in
     (* muks et al's algorithm for sampling *)
     let validate_plane instance =
@@ -138,6 +138,6 @@ module MajoritySamplingAlgorithm (Spec: SPEC) (Function: FUNCTION with type p = 
       end
     done;
     (* if fewer than this threshold of 1-instances then 0-instance (1/3 prob of incorrect)  *)
-    (if !count <= threshhold then false else true), !query_count
+    (if !count < threshhold then false else true), !query_count
 
 end

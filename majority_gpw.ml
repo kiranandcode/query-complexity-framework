@@ -6,7 +6,7 @@ module MajorityGPW = struct
 
   type p = int
 
-  type o = FakePointers | RandomPointers
+  type o = FakePointers | RandomPointers | FixedValidCount of int | RandomValidCount
 
   let get_params (_, n) = n
 
@@ -147,8 +147,12 @@ module MajorityGPW = struct
       done;
     done;
     let set = ref (Set.empty (module Int)) in
-    let bound = (n / 2 - 1 ) in
-    while Set.length !set <= bound do
+    let bound = match _options with
+      | Some RandomValidCount -> Random.int (n / 2 - 1)
+      | Some (FixedValidCount n) -> n
+      | _ -> (n / 2 - 1)
+    in
+    while Set.length !set < bound do
       let index = Random.int n in
       set := (Set.add !set index)
     done;
